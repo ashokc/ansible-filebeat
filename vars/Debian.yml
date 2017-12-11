@@ -1,0 +1,12 @@
+---
+
+filebeat_home_dir: "/usr/share/filebeat"
+filebeat_conf_dir: "/etc/filebeat"
+filebeat_data_dir: "/var/lib/filebeat"
+filebeat_logs_dir: "/var/log/filebeat"
+filebeat_pid_dir: "/var/run/filebeat"
+filebeat_service: "/lib/systemd/system/filebeat.service"
+
+filebeat_bin_dir: "{{filebeat_home_dir}}/bin"
+filebeat_pid_file: "{{filebeat_pid_dir}}/filebeat.pid"
+

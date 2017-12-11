@@ -1,0 +1,19 @@
+---
+#Add the filebeat user/group before installing from packages.
+
+- name: Ensure optional filebeat group is created with the correct id.
+  group:
+    state: present
+    name: "{{ filebeat_group }}"
+    system: yes
+
+- name: Ensure optional filebeat user is created with the correct id.
+  user:
+    state: present
+    name: "{{ filebeat_user }}"
+    comment: filebeat system user
+    system: yes
+    createhome: no
+    group: "{{ filebeat_group }}"
+    groups: adm
+

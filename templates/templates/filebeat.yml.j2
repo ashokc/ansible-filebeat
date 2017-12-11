@@ -1,0 +1,20 @@
+filebeat.prospectors:
+
+- type: log
+
+  enabled: true
+
+  paths:
+   - /tmp/custom.log
+
+  fields:
+    type: {{ansible_hostname}}
+    from: beats
+
+  multiline.pattern: '^\s[+]{2}\scontinuing .*'
+  multiline.match: after
+
+output.logstash:
+  hosts:
+    {{ filebeat_logstash_hosts | to_nice_yaml }}
+

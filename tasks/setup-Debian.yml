@@ -1,0 +1,50 @@
+---
+
+- name: Ensure dependency is installed (Ubuntu).
+  apt:
+    name: apt-transport-https
+    state: present
+
+- name: Add Elasticsearch apt key.
+  apt_key:
+    url: "{{ es_apt_key }}"
+    state: present
+
+- name: Add filebeat repository.
+  apt_repository:
+    repo: "{{ es_apt_url }}"
+    state: present
+    update_cache: yes
+
+- name: Install filebeat
+  apt:
+#    name: filebeat{% if filebeat_version is defined and filebeat_version != "" %}={{ filebeat_version }}{% endif %}
+    name: filebeat
+    state: present
+    allow_unauthenticated: "{{ 'no' if es_apt_key else 'yes' }}"
+    cache_valid_time: 86400
+
+- name: Create Directories
+  file: path={{ item }} state=directory recurse=yes
+  with_items:
+    - "{{filebeat_home_dir}}"
+    - "{{filebeat_conf_dir}}"
+    - "{{filebeat_data_dir}}"
+    - "{{filebeat_logs_dir}}"
+    - "{{filebeat_pid_dir}}"
+
+- name: Change ownsership
+  file: path={{ item }} state=directory recurse=yes owner={{ filebeat_user }} group={{ filebeat_group }}
+  with_items:
+    - "{{filebeat_home_dir}}"
+    - "{{filebeat_conf_dir}}"
+    - "{{filebeat_data_dir}}"
+    - "{{filebeat_logs_dir}}"
+    - "{{filebeat_pid_dir}}"
+  when: (filebeat_group is defined) and (filebeat_user is defined)
+
+# Copy the systemd specific files
+
+- name: Copy Systemd File for Instance
+  template: src=systemd/filebeat.service.j2 dest={{filebeat_service}} mode=0644 force=yes
+

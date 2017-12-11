@@ -1,0 +1,29 @@
+---
+
+- name: os-specific vars
+  include_vars: "{{ansible_os_family}}.yml"
+  tags:
+    - always
+
+- name: Include optional user and group creation.
+  include_tasks: filebeat-optional-users.yml
+  when: (filebeat_group is defined) and (filebeat_user is defined)
+
+- name: Install for Debian
+  include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Copy config files
+  template: src={{ item }} dest={{filebeat_conf_dir}}/{{ item | basename | regex_replace('\.j2','') }} mode=0644
+  with_fileglob:
+    - ../templates/*.j2
+
+# This will always run...
+
+- name: Enabling filebeat service upon boot & restarting
+  debug: msg="Finished installing filebeat. Reloading systemd config & Restarting"
+  notify:
+    - reload systemd configuration
+    - restart filebeat
+  changed_when: True
+

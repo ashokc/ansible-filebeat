@@ -1,0 +1,19 @@
+[Unit]
+Description=filebeat
+Documentation=https://www.elastic.co/guide/en/beats/filebeat/current/index.html
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+
+{% if (filebeat_user is defined) and (filebeat_group is defined) %}
+User={{filebeat_user}}
+Group={{filebeat_group}}
+{% endif %}
+
+ExecStart={{filebeat_bin_dir}}/filebeat -c {{filebeat_conf_dir}}/filebeat.yml -path.home {{filebeat_home_dir}} -path.config {{filebeat_conf_dir}} -path.data {{filebeat_data_dir}} -path.logs {{filebeat_logs_dir}}
+Restart=always
+WorkingDirectory={{filebeat_home_dir}}
+
+[Install]
+WantedBy=multi-user.target
