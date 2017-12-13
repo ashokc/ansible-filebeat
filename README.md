@@ -10,7 +10,7 @@ Ansible role for Logstash. Tested platforms at this time are:
 ##### Dependency
 None.
 
-This role has been used and tested with the [elastic.elasticsearch](https://github.com/elastic/ansible-elasticsearch) role as the provisioner for elasticsearch, [ashokc.kibana](https://github.com/ashokc/ansible-kibana) for Kibana, and [ashokc.logstash](https://github.com/ashokc/ansible-logstash) as part of an ELK stack.
+This role has been used and tested with the [elastic.elasticsearch](https://github.com/elastic/ansible-elasticsearch) role as the provisioner for elasticsearch, [ashokc.kibana](https://github.com/ashokc/ansible-kibana) for Kibana, and [ashokc.logstash](https://github.com/ashokc/ansible-logstash) for Logstash as part of an ELK stack in the blog article [ELK Stack with Vagrant and Ansible](http://xplordat.com/2017/12/12/elk-stack-with-vagrant-and-ansible/)
 
 ## Usage
 
